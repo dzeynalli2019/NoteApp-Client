@@ -21,7 +21,11 @@ export const Homepage = ({ history }) => {
   }, []);
 
   function deleteHandler (noteTitle) {
-    Axios.delete(`https://note-app-beginners.herokuapp.com/${noteTitle}`);
+    Axios.delete(`https://note-app-beginners.herokuapp.com/${noteTitle}`).then(() => {
+      list.filter((val) => {
+        return val.title != noteTitle
+      })
+    })
     console.log(noteTitle);
 }
 
@@ -35,10 +39,9 @@ function updateHandler (name) {
       noteTitle: name, 
       noteText: newText
   }).then(() => {
-    setList([
-      ...list, 
-      {noteTitle: name, noteText: newText},
-  ])
+    setList(list.map((val) => {
+      return (val.title == name) ? {noteTitle: name, noteText: newText} : val
+    }))
   });
 
   
