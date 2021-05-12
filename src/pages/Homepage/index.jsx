@@ -20,34 +20,32 @@ export const Homepage = ({ history }) => {
       })
   }, []);
 
-  function deleteHandler (noteTitle) {
-    Axios.delete(`https://note-app-beginners.herokuapp.com/${noteTitle}`).then(() => {
-      list.filter((val) => {
-        return val.title != noteTitle
+  function deleteHandler(id) {
+    Axios.delete(`https://note-app-beginners.herokuapp.com/${id}`).then(() => {
+      setList(list.filter((val) => {
+        return val._id !== id
       })
-    })
-    console.log(noteTitle);
-}
-
-
-function changeUpdate (event) {
-  setNewText(event.target.value);
-}
-
-function updateHandler (name) {
-  Axios.patch("https://note-app-beginners.herokuapp.com/", {
-      noteTitle: name, 
-      noteText: newText
-  }).then(() => {
-    setList(list.map((val) => {
-      return (val.title == name) ? {noteTitle: name, noteText: newText} : val
-    }))
-  });
-
+      );
+    });
+    
+    console.log(id);
+  }
   
+  function changeUpdate (event) {
+    setNewText(event.target.value);
+  }
 
-  setNewText("");
-}
+  function updateHandler (name) {
+    Axios.patch("https://note-app-beginners.herokuapp.com/", {
+        noteTitle: name, 
+        noteText: newText
+    }).then(() => {
+      setList(list.map((val) => {
+        return (val.title === name) ? {noteTitle: name, noteText: newText} : val
+      }))
+    });
+    setNewText("");
+  }
 
   return (
     <Container>
@@ -60,7 +58,7 @@ function updateHandler (name) {
                 <Note
                   newChange={changeUpdate}
                   onUpdate={() => {updateHandler(note.title)}}
-                  onDelete={toggleModal}
+                  onDelete={() => {deleteHandler(note._id)}}
                   note={note}
                 />
                 {modalStatus && (
@@ -71,8 +69,8 @@ function updateHandler (name) {
                       <ModalBtn
                         key={1}
                         onClick={() => {
-                          deleteHandler(note.title)
-                          history.push("/");
+                          deleteHandler(note._id)
+                          // history.push("/");
                           toggleModal();
                         }}
                       >
