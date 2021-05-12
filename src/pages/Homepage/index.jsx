@@ -22,6 +22,7 @@ export const Homepage = ({ history }) => {
 
   function deleteHandler (noteTitle) {
     Axios.delete(`https://note-app-beginners.herokuapp.com/${noteTitle}`);
+    console.log(noteTitle);
 }
 
 
@@ -33,7 +34,15 @@ function updateHandler (name) {
   Axios.patch("https://note-app-beginners.herokuapp.com/", {
       noteTitle: name, 
       noteText: newText
+  }).then(() => {
+    setList([
+      ...list, 
+      {noteTitle: name, noteText: newText},
+  ])
   });
+
+  
+
   setNewText("");
 }
 
