@@ -21,9 +21,9 @@ export const Homepage = ({ history }) => {
   }, []);
 
   function deleteHandler(id) {
-    Axios.delete(`https://note-app-beginners.herokuapp.com/${id}`).then(() => {
+    Axios.delete(`https://note-app-beginners.herokuapp.com/${id}`).then((res) => {
       setList(list.filter((val) => {
-        return val._id !== id
+        return val._id !== res._id
       })
       );
     });
